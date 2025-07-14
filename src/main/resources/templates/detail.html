@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Drug Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>CSI DevOps Project</h2>
+    <div>
+        <a href="/">Home</a>
+        <a href="/contact">Contact Us</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1 th:text="${drug.name}">Drug Name</h1>
+
+    <p><strong>Description:</strong> <span th:text="${drug.description}"></span></p>
+    <p><strong>Usage Instructions:</strong> <span th:text="${drug.usage}"></span></p>
+    <p><strong>Safety Precautions:</strong> <span th:text="${drug.safety}"></span></p>
+    <p><strong>Manufacturer:</strong> <span th:text="${drug.manufacturer}"></span></p>
+    <p><strong>Expiry Date:</strong> <span th:text="${drug.expiry}"></span></p>
+    <p><strong>Category:</strong> <span th:text="${drug.category}"></span></p>
+
+    <a class="back-link" href="/">← Back to Drug List</a>
+</div>
+
+</body>
+</html>
