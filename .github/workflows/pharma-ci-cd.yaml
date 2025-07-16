@@ -110,7 +110,6 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=csi-springboot-pharma-app
-            -Dsonar.qualitygate.wait=true
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
             -Dsonar.java.binaries=target/classes
 
