@@ -60,7 +60,7 @@ jobs:
           path: target/surefire-reports/*.xml
           reporter: java-junit
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
   gitleaks-scan:
     name: Gitleaks Secret Scan
