@@ -73,5 +73,5 @@ jobs:
 
       - name: Run Gitleaks scan
         uses: gitleaks/gitleaks-action@v2
-        with:
-          github_token: ${{ secrets.GHCR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHCR_TOKEN }}
