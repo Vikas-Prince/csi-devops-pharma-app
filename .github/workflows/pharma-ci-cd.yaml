@@ -213,7 +213,7 @@ jobs:
           java-version: '17'
 
       - name: Set dynamic version (based on commit SHA)
-        run: mvn versions:set -DnewVersion=1.0.0-${{ github.sha }}
+        run: mvn versions:set -DnewVersion=1.0.0-dev-SNAPSHOT
 
       - name: 🛠️ Build Artifact (JAR)
         run: mvn clean package
@@ -221,6 +221,4 @@ jobs:
       - name: Deploy to Nexus
         run: |
           mvn deploy \
-            -DaltDeploymentRepository=nexus::default::${{ secrets.NEXUS_URL }} \
-            -Dnexus.username=${{ secrets.NEXUS_USERNAME }} \
-            -Dnexus.password=${{ secrets.NEXUS_PASSWORD }}
+            -DaltDeploymentRepository=nexus::default::http://${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}@98.70.35.194:8081/repository/maven-snapshots/
