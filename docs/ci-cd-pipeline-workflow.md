@@ -29,7 +29,7 @@ To establish a production-ready, auditable **Continuous Delivery (CD)** pipeline
 
 ## Pipeline Workflow Overview
 
-![CI/CD Pipeline Diagram](./csi-pharma.drawio.png)
+![CI/CD Pipeline Diagram](../snapshots/csi-pharma.drawio.png)
 
 The following image represents the CI/CD and GitOps-based deployment strategy used for the Spring Boot pharmaceutical platform. It includes build, test, scan, registry push, GitOps sync, and environment-specific deployment workflows.
 
