@@ -116,6 +116,7 @@ jobs:
             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
+            -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=csi-springboot-pharma-app
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
             -Dsonar.java.binaries=target/classes
@@ -224,7 +225,7 @@ jobs:
       - name: Deploy to Nexus
         run: |
           mvn deploy \
-            -DaltDeploymentRepository=nexus::default::http://${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}@98.70.35.194:8081/repository/maven-snapshots/
+            -DaltDeploymentRepository=nexus::default::http://${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}@13.235.69.41:8081/repository/maven-snapshots/
 
 
   update-gitops-dev:
@@ -237,18 +238,18 @@ jobs:
     - name: Checkout GitOps Repo
       uses: actions/checkout@v3
       with:
-        repository: Vikas-Prince/test-ops
+        repository: Vikas-Prince/csi-pharma-app-gitops
         token: ${{ secrets.GHCR_TOKEN }}
-        path: test-ops
+        path: csi-pharma-app-gitops
 
     - name: Set Git user config
       run: |
-        cd test-ops
+        cd csi-pharma-app-gitops
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
     - name: Update image tag in Dev YAML (GHCR)
       run: |
-        cd test-ops
+        cd csi-pharma-app-gitops
         IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/pharma-dev:${{ github.sha }}
         sed -i "s|image: .*|image: $IMAGE_TAG|" environments/dev/rollout-patch.yaml
     - name: Create PR to GitOps (Dev)
@@ -263,7 +264,7 @@ jobs:
           `ghcr.io/${{ github.repository_owner }}/pharma-dev:${{ github.sha }}`
         base: main
         branch: auto/update-dev-${{ github.sha }}
-        path: test-ops
+        path: csi-pharma-app-gitops
 
 
   slack-notify:

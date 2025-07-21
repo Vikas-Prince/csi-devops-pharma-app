@@ -79,18 +79,18 @@ jobs:
       - name: Checkout GitOps repo
         uses: actions/checkout@v4
         with:
-          repository: Vikas-Prince/test-ops
+          repository: Vikas-Prince/csi-pharma-app-gitops
           token: ${{ secrets.GHCR_TOKEN }}
-          path: test-ops
+          path: csi-pharma-app-gitops
 
       - name: Configure Git user
         run: |
-          cd test-ops
+          cd csi-pharma-app-gitops
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
       - name: Update image tag in Prod rollout-patch
         run: |
-          cd test-ops
+          cd csi-pharma-app-gitops
           sed -i "s|image: .*|image: ${{ secrets.ACR_LOGIN_SERVER }}/pharma-prod:${{ github.event.inputs.image_tag }}|" environments/prod/rollout-patch.yaml
       - name: Commit & PR
         uses: peter-evans/create-pull-request@v5
@@ -101,7 +101,7 @@ jobs:
           body: "Triggered manually via workflow_dispatch."
           branch: promote-prod-${{ github.run_id }}
           base: main
-          path: test-ops
+          path: csi-pharma-app-gitops
 
 
   slack-notify:
