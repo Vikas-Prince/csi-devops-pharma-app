@@ -1,0 +1,140 @@
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #fdfdfd;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background-color: orangered;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar h2 {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Layout */
+.container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+}
+
+/* Headings */
+h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #222;
+}
+
+/* Form */
+form {
+    margin-bottom: 2rem;
+}
+
+input[type="text"] {
+    padding: 0.6rem 1rem;
+    width: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.6rem 1.2rem;
+    background-color: orangered;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d84300;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: orangered;
+    color: white;
+    font-weight: 600;
+}
+
+td a {
+    color: orangered;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Back link */
+a.back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    color: orangered;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+a.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Contact Info */
+ul.contact-info {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+ul.contact-info li {
+    margin-bottom: 0.8rem;
+}
