@@ -67,7 +67,8 @@ jobs:
   update-qa-manifest:
     runs-on: ubuntu-latest
     needs: docker-build-and-scan
-
+    environment:
+      name: qa
     steps:
       - name: Checkout GitOps repo
         uses: actions/checkout@v4

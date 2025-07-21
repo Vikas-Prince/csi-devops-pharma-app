@@ -75,6 +75,8 @@ jobs:
   update-prod-manifest:
     runs-on: ubuntu-latest
     needs: docker-build-and-scan
+    environment:
+      name: prod
     steps:
       - name: Checkout GitOps repo
         uses: actions/checkout@v4
