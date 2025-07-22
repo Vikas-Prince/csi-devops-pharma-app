@@ -1,4 +1,4 @@
-name: Triggered manually via workflow_dispatch to promote image to QA.
+name: Java CD - Promote to Staging
 
 on:
   pull_request:
@@ -94,7 +94,7 @@ jobs:
           token: ${{ secrets.GHCR_TOKEN }}
           commit-message: "chore(QA): Promote ${{ github.sha }} to QA"
           title: "Promote to QA - ${{ github.sha }}"
-          body: "Triggered manually via workflow_dispatch."
+          body: "Tirggered this pipeline after successfull pr merge to develop branch."
           branch: promote-QA-${{ github.run_id }}
           base: main
           path: csi-pharma-app-gitops
