@@ -2,7 +2,6 @@ name: Java CD - Promote to Staging
 
 on:
   pull_request:
-    types: [closed] 
     branches:
       - release/*
     paths:

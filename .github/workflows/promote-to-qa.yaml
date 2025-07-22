@@ -1,4 +1,4 @@
-name: Java CD - Promote to Staging
+name: Java CD - Promote to QA
 
 on:
   pull_request:
