@@ -1,16 +1,16 @@
 name: Triggered manually via workflow_dispatch to promote image to QA.
 
 on:
-  workflow_dispatch:
-    inputs:
-      promote_from:
-        description: "Source environment"
-        required: true
-        default: "dev"
-      promote_to:
-        description: "Target environment"
-        required: true
-        default: "qa"
+  pull_request:
+    types: [closed] 
+    branches:
+      - develop
+    paths:
+      - 'src/**'            
+      - 'pom.xml'
+      - 'Dockerfile'           
+      - 'scripts/**'        
+      - 'config/**' 
 
 permissions:
   contents: write
@@ -18,6 +18,7 @@ permissions:
 
 jobs:
   docker-build-and-scan:
+    if: github.event.pull_request.merged == true
     name: Docker Build and Scan
     runs-on: ubuntu-latest
 
@@ -168,12 +169,12 @@ jobs:
                   },
                   {
                     \"title\": \"Source Environment\",
-                    \"value\": \"${{ github.event.inputs.promote_from }}\",
+                    \"value\": \"${{ Dev }}\",
                     \"short\": true
                   },
                   {
                     \"title\": \"Target Environment\",
-                    \"value\": \"${{ github.event.inputs.promote_to }}\",
+                    \"value\": \"${{ QA }}\",
                     \"short\": true
                   }
                 ]
