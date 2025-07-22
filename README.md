@@ -20,27 +20,17 @@ The deployment lifecycle includes:
 - Enterprise-grade monitoring and observability at both cluster and application levels
 - Notification and alerting integration for real-time feedback
 
-
-For details on the **branching strategy** and **pipeline architecture**, refer to the documentation: 
- 
-👉 [View Docs »](https://github.com/Vikas-Prince/csi-devops-pharma-app/tree/develop/docs)
-
-![pipeline-architecture](./snapshots/csi-pharma.drawio.png)
-
 ---
 
 ## Repository Structure
 
-## 📁 Repository Structure
-
 To maintain clear separation of concerns, the platform is divided into **three distinct repositories**:
 
-| Repository Name               | Purpose                                                                                                                                           | Maintained By                  | Repository Link                                                                 |
-|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|----------------------------------------------------------------------------------|
-| `csi-devops-pharma-app`      | Java application source code with Maven build and unit tests, GitHub Actions CI pipeline, security scanning, containerization, and artifact publishing | Application Development Team (Vikas) | [🔗 GitHub](https://github.com/Vikas-Prince/csi-devops-pharma-app)             |
-| `csi-pharma-app-infra`       | Infrastructure as Code (IaC) using Terraform for provisioning Azure resources (AKS, ACR, Key Vault, Networking, etc.) with modular and environment-specific configurations | DevOps / Infrastructure Team (Vikas) | [🔗 GitHub](https://github.com/Vikas-Prince/csi-pharma-app-infra)              |
-| `csi-pharma-app-gitops`      | GitOps repository containing ArgoCD Application manifests, Kubernetes deployment configurations using Kustomize base and overlays per environment, and Helm charts for monitoring stack deployment | Platform / DevOps Team (Vikas) | [🔗 GitHub](https://github.com/Vikas-Prince/csi-pharma-app-gitops)             |
-
+| Repository Name               | Purpose                                                     | Maintained By           |
+|------------------------------|-------------------------------------------------------------|------------------------|
+| `csi-devops-java-azure`             | Java application source code with Maven build and unit tests, GitHub Actions CI pipeline, security scanning, containerization, and artifact publishing | Application Development Team (Vikas) |
+| `iac-terraform`       | Infrastructure as Code (IaC) using Terraform for provisioning Azure resources (AKS, ACR, Key Vault, Networking, etc.) with modular and environment-specific configurations | DevOps / Infrastructure Team (Vikas) |
+| `gitops-platform`     | GitOps repository containing ArgoCD Application manifests, Kubernetes deployment configurations using Kustomize base and overlays per environment, and Helm charts for monitoring stack deployment | Platform / DevOps Team (Vikas) |
 
 ---
 

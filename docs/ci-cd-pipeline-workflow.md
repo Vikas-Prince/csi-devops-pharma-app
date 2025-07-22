@@ -33,12 +33,12 @@ To establish a production-ready, auditable **Continuous Delivery (CD)** pipeline
 
 The following image represents the CI/CD and GitOps-based deployment strategy used for the Spring Boot pharmaceutical platform. It includes build, test, scan, registry push, GitOps sync, and environment-specific deployment workflows.
 
-### Pipeline Flow
+### Developer Flow
 
-- Developer creates a `feature/*` branch
-- Raise PR to `develop`
+1. Developer creates a `feature/*` branch
+2. Raise PR to `develop`
+3. CI Pipeline triggers and executes:
 
-#### CI Pipeline triggers and executes:
    * Checkstyle
    * Build + Test (JUnit)
    * Upload artifacts
@@ -50,34 +50,31 @@ The following image represents the CI/CD and GitOps-based deployment strategy us
    * ArgoCD auto-syncs to Dev cluster
    * Slack notification sent
 
-#### Promotion to QA (Merge into `develop`)
-**Trigger:** Merge of PR into `develop`.
-**Pipeline executes after merge**:
-  * Builds & scans Docker image using given SHA tag
-  * Pushes to DockerHub (QA registry)
-  * Updates `environments/qa/rollout-patch.yaml`.
-  * ArgoCD syncs to **QA** environment.
-  * Sends Slack notification
+### Promotion to QA
 
-#### Promotion to Staging (PR to `release`)
-**Trigger:** PR raised from `develop` to `release`.
-**Pipeline executes during PR** (pre-merge):
-  * Builds Docker image.
-  * Trivy scan.
-  * Pushes image to ECR with tag.
-  * Updates `environments/staging/rollout-patch.yaml`.
-  * ArgoCD syncs to **Staging** environment.
-  * Slack notification sent.
+* Triggered manually using `workflow_dispatch`
+* Builds & scans Docker image using given SHA tag
+* Pushes to DockerHub (QA registry)
+* Updates QA GitOps manifest
+* Triggers ArgoCD deployment
+* Sends Slack notification
 
-#### Promotion to Production (Merge into `release`)
-**Trigger:** Merge of PR into `release`.
-**Pipeline executes after merge**:
-  * Uses already-built image (tagged SHA or semantic version).
-  * Trivy scan.
-  * Pushes image to ACR (or production registry).
-  * Updates GitOps `environments/prod/rollout-patch.yaml`.
-  * ArgoCD syncs to **Production**.
-  * Slack notification sent.
+### Promotion to Staging
+
+* Merge `develop` ➔ `release`
+* Pipeline triggers conditionally
+* Builds Docker image, scans, and pushes to **ECR**
+* Updates `environments/staging/rollout-patch.yaml`
+* ArgoCD syncs to staging
+* Slack notification
+
+### Promotion to Production
+
+* Manually triggered via `workflow_dispatch`
+* Builds Docker image, scans with Trivy
+* Pushes to Azure ACR with **semantic version tag**
+* Updates `environments/prod/rollout-patch.yaml`
+* ArgoCD syncs and Slack notification
 
 ---
 
@@ -251,7 +248,7 @@ sed -i "s|image: .*|image: <REGISTRY>/pharma-<env>:<TAG>|" environments/dev/roll
 
 | Version | Date       | Changes                       | Author |
 | ------- | ---------- | ----------------------------- | ------ |
-| 2.0     | 2025-07-15 |  Architect CI/CD Pipeline using GitHub Actions | Vikas  |
+| 1.0     | 2025-07-15 |  Architect CI/CD Pipeline using GitHub Actions | Vikas  |
 
 ---
 
