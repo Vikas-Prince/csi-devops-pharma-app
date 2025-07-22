@@ -147,7 +147,6 @@ This stage focuses on static code analysis using SonarQube to enforce code quali
 
 The pipeline stops here.
 
-![sonar-failed](../snapshots/sonar-failed.jpg)
 
 ![failed-pipeline](../snapshots/pipeline-triggered.jpg)
 
@@ -155,7 +154,7 @@ A Jira ticket/work item/issue would typically be raised to the development team 
 
 #### Bypassing Sonar Quality Gates (For Testing Only)
 
-For the purpose of this demonstration, I will temporarily bypass the SonarQube Quality Gates. This is NOT recommended for production environments but allows us to proceed with the pipeline's subsequent stages for testing.
+For the purpose of this demonstration and for the testing purpose i developed this application So, I will temporarily bypass the SonarQube Quality Gates. This is NOT recommended for production environments but allows us to proceed with the pipeline's subsequent stages for testing.
 
 ![sonar-checks-pass](../snapshots/sonar-passed.jpg)
 
@@ -177,11 +176,11 @@ Once the SonarQube checks were bypassed (for testing purposes), the next logical
 
 Once the image was scanned and cleared, I pushed it to GitHub Container Registry (GHCR). The dynamic tagging based on the commit SHA ensured that the image was traceable and tied to the specific commit that triggered the build.
 
-![build and push pass](../snapshots/image-pushed-ghcr.jpg)
+![docker-image](../snapshots/pharma-dev-image.jpg)
 
 This stage is also successfully passed and ahead to next stages
 
-![docker-image](../snapshots/pharma-dev-image.jpg)
+![build and push pass](../snapshots/image-pushed-ghcr.jpg)
 
 ---
 
@@ -240,6 +239,8 @@ Next, I used the GitHub Action `peter-evans/create-pull-request@v5` to automate 
 
 The PR contained the updated `rollout-patch.yaml` with the new Docker image tag, ensuring that ArgoCD would detect the change and trigger a deployment to the development Kubernetes cluster.
 
+![tag-updated](../snapshots/tag-updated.jpg)
+
 **Outcome:** Once the PR was created and merged, ArgoCD automatically detected the change and deployed the updated image to the dev environment.
 
 ![stage-success](../snapshots/gitops-dev-pr-raised.jpg)
@@ -259,14 +260,11 @@ In this step, I used the Slack API to send a notification summarizing the outcom
 * Links to the generated reports (Checkstyle, JUnit, Trivy, etc.)
 * Links to the PR and build logs
 
+![slack-channel](../snapshots/message-sent.jpg)
 
 This job was configured to run after all stages of the pipeline completed, so the team would get real-time updates on the status of the deployment.
 
 ![slack-status](../snapshots/sent-slack.jpg)
-
-After the successful deployment to Dev, a notification was sent to the Slack channel with all relevant details, ensuring the team stayed updated on the pipeline's success and could immediately investigate if any issues arose.
-
-![slack-channel](../snapshots/message-sent.jpg)
 
 With the successful execution of the main Java integration pipeline, including static analysis, security scans, Docker build, artifact management, and GitOps deployment to the Development environment, the validated changes are now ready to be merged.
 
@@ -296,8 +294,12 @@ The GitHub Actions pipeline configuration ensures that the deployment to QA is d
 - **Security Scans:** The pipeline runs security scans (such as Trivy) to ensure that no vulnerabilities are present in the new image.
 
 - **Image push to DockerHub:** Pipeline pushed it to DockerHub Container Registry (GHCR). The dynamic tagging based on the commit SHA ensured that the image was traceable and tied to the specific commit that triggered the build.
+
+![dockerhub](../snapshots/dockerhub-image.jpg)
   
 - **Update GitOps Repo for QA:** Once the Docker image is built and validated, the pipeline updates the GitOps repository with the new image tag, so it points to the latest build.
+
+![qa-pr](../snapshots/qa-pr.jpg)
   
 - **Slack Notification:** Once the deployment to QA is completed successfully, a Slack notification is sent to the team to inform them about the new deployment.
 
