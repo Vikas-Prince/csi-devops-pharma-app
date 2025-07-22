@@ -167,16 +167,6 @@ jobs:
                     \"value\": \"${{ github.sha }}\",
                     \"short\": true
                   },
-                  {
-                    \"title\": \"Source Environment\",
-                    \"value\": \"${{ Dev }}\",
-                    \"short\": true
-                  },
-                  {
-                    \"title\": \"Target Environment\",
-                    \"value\": \"${{ QA }}\",
-                    \"short\": true
-                  }
                 ]
               }
             ]
