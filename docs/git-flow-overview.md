@@ -26,31 +26,45 @@ This document describes the GitFlow branching strategy tailored for a Java Sprin
 
 ---
 
-## 🔁 Development Workflow
+### 🔁 Development Workflow
 
-### 👇 Standard Feature Workflow
+#### Feature/Temp Branch → Develop (via PR)
+- Developers raise a PR from their working branch (e.g., `temp/feature-x`) to `develop`.
+- The PR triggers the **Dev Environment CI/CD Pipeline**:
+  - Unit tests, build, SAST/DAST scans are performed.
+  - Application is deployed into the **Dev** environment.
+- Once the PR is merged into `develop`, the **QA pipeline** is triggered:
+  - Deployment happens to the **QA** environment.
+  - Ensures the code in `develop` is verified by QA.
 
-* Developer creates: `feature/<ticket-id>-<desc>` from `develop`
-* Code linked to GitHub Issues or Projects
-* PR opened to `develop`
-* CI pipeline triggers: Build → Checkstyle → Test → Secret Scan → SAST → Docker Build & Scan
-* Merge into `develop`:
-  * Updates GitOps `environments/dev/rollout-patch.yaml`
-  * Auto-deploys to Dev (ArgoCD watches rollout)
-  * Post verification, code auto-promotes to QA via pipeline
-* If QA passes: Merge `develop` → `release`
-* Pipeline builds staging artifact → updates GitOps `environments/staging/rollout-patch.yaml`
-* Post-Staging → Manual promotion to Prod via `workflow_dispatch`
-* `main` updated post-prod as golden DR copy
+#### Develop → Release (via PR)
+- A PR is created from `develop` to `release` for pre-prod readiness.
+- This PR triggers the **Staging Environment Deployment**:
+  - Staging deployment happens **as part of the PR, before merging**.
+  - Final integration, UAT, performance, and smoke testing is done in staging.
+  - Prevents bugs from entering the release pipeline before verification.
 
-### 🚨 Hotfix Flow
+#### Release → Production
+- Once the staging validation is complete, the `develop` branch PR is merged into `release`.
+- This **merge** triggers the **Production CD Pipeline**:
+  - Production deployment occurs automatically or with an approval step.
+  - Ensures only staging-tested code reaches production.
 
-* Create `hotfix/<issue>` from `release`
-* Implement & test fix locally
-* Open PR to `release` and `main`
-* CI pipeline triggers secure build → Docker scan → GitOps patch (prod)
-* Manual confirmation required
-* Optionally cherry-pick to `develop`
+#### Bug Fix Flow (from `develop`)
+- A **bug fix** branch is created from `develop` (e.g., `bugfix/fix-issue-123`).
+- Follows the **same process**:
+  - PR → `develop` (triggers Dev pipeline)
+  - Merge → triggers QA pipeline
+  - Later promotion to `release` and then `prod` via PRs.
+
+#### Hotfix Flow (from `release`)
+- A **hotfix** branch is created from `release` (e.g., `hotfix/fix-prod-issue`).
+- Follows a **faster path** for urgent production issues:
+  - PR → `release` (triggers **Staging deployment**)
+  - Merge → triggers **Production pipeline** (with approval if required)
+- After production deployment:
+  - The **hotfix is back-merged** into both `develop` and `main` to maintain consistency.
+
 
 ---
 
@@ -70,18 +84,18 @@ This document describes the GitFlow branching strategy tailored for a Java Sprin
 | Dev         | ✅ Auto-deploy on PR merge to `develop`, no approval required        |
 | QA          | ✅ Auto-deploy on PR merge to `develop`, no approval required        |
 | Staging     | ✅ Requires PR-based sync with **approval reviewer**, must wait for reviewer confirmation |
-| Prod        | ✅ Manual promotion via `workflow_dispatch`, requires **proper reviewers** and approval before deployment |
+| Prod        | ✅ Promotion requires **proper reviewers** and approval before deployment |
 
 ---
 
-## 🚀 Deployment Mapping
+### ✅  Environment → Trigger Event → Pipeline Source → Deployment Timing
 
-| Branch     | Environment   | Trigger Type                  |
-| ---------- | ------------- | ----------------------------- |
-| develop    | Dev, QA       | Auto on PR merge              |
-| release    | Staging, Prod | Auto (Staging), Manual (Prod) |
-| main       | DR            | Manual update                 |
-| feature/\* | UAT           | On-demand                     |
+| Environment | Trigger Event   | Pipeline Source | Deployment Timing         |
+|-------------|------------------|------------------|----------------------------|
+| dev         | PR to `develop`  | `develop`        | On PR creation             |
+| qa          | Merge to `develop` | `develop`      | On PR merge                |
+| staging     | PR to `release` (pre-merge) | `release` | Before merging to `release` |
+| prod        | Merge to `release` | `release`      | On merge                   |
 
 ---
 
@@ -92,17 +106,6 @@ This document describes the GitFlow branching strategy tailored for a Java Sprin
 | Squash Merge | Preferred for short-lived branches (clean history)     |
 | Merge Commit | Used for `release → main` or multi-commit hotfix flows |
 | Rebase       | Optional for local cleanups, not for shared branches   |
-
----
-
-## 🧪 CI/CD Triggers
-
-| Event                   | Behavior                                            |
-| ----------------------- | --------------------------------------------------- |
-| PR to develop           | CI Build + SAST + GitLeaks + Docker push to GHCR    |
-| Merge to develop        | Auto-deploy to Dev and Promote to QA (GitOps patch)            |
-| Merge develop → release | Triggers build → push to ECR → GitOps patch Staging |
-| Promote Prod (manual)   | `workflow_dispatch`: builds → ACR → patch prod      |
 
 ---
 
@@ -122,4 +125,4 @@ This document describes the GitFlow branching strategy tailored for a Java Sprin
 
 | Version | Date       | Changes                       | Author |
 | ------- | ---------- | ----------------------------- | ------ |
-| 1.0     | 2025-07-15 | Initial GitHub-based strategy | Vikas  |
+| 2.0     | 2025-07-15 | Initial GitHub-based strategy | Vikas  |
